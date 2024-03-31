@@ -1,6 +1,15 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
 
 function Product({ data }) {
+
+  const navigate = useNavigate()
+
+  const handleReadMore = (product) => {
+    console.log(product)
+    navigate('/Information', {state: { product: product }})
+  }
+
   return (
     <div className="mx-auto grid grid-cols-4 w-full max-w-7xl items-center space-y-4 px-2 py-10 md:gap-6 md:space-y-0 ml-[7vw]">
       {data.map((product, i) => (
@@ -19,7 +28,7 @@ function Product({ data }) {
             <p className="mt-2 text-sm text-gray-300">
               Rating: {product.rating}
             </p>
-            <button className="mt-2 inline-flex cursor-pointer items-center text-sm font-semibold text-white">
+            <button onClick={() => handleReadMore(product)} className="mt-2 inline-flex cursor-pointer items-center text-sm font-semibold text-white">
               Read More &rarr;
             </button>
           </div>

@@ -6,11 +6,11 @@ import { ChevronDown } from 'lucide-react'
 const menuItems = [
   {
     name: 'Home',
-    href: '#',
+    href: '/',
   },
   {
     name: 'Statistics',
-    href: '#',
+    href: '/Statistics',
   }
 ]
 
