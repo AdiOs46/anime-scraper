@@ -1,45 +1,58 @@
 import { useLocation } from 'react-router-dom'
 import React from 'react'
-import { Star, ChevronDown } from 'lucide-react'
+import { useState } from 'react'
 
 function Information() {
-    const location = useLocation()
-    const product = location.state.product
-    console.log(product)
+  const location = useLocation()
+  const product = location.state.product
+  const [isExpanded, setIsExpanded] = useState(false);
 
-    // use the product object
-    return (
-    <section className="overflow-hidden">
-      <div className="mx-auto max-w-5xl px-5 py-24">
-        <div className="mx-auto flex flex-wrap items-center lg:w-4/5">
-          <img
-            className="h-64 w-[5vw] rounded object-contain lg:h-96 lg:w-1/2"
-            src={product.image}
-          />
-          <div className="mt-6 w-full lg:mt-0 lg:w-1/2 lg:pl-10">
-            <h2 className="text-sm font-semibold tracking-widest text-gray-500">Anime</h2>
-            <h1 className="my-4 text-3xl font-semibold text-white whitespace-nowrap overflow-ellipsis">{product.title}</h1>
-            <div className="flex items-center justify-between">
-              <span className="title-font text-xl font-bold text-white">Rating: {product.rating}</span>
-            </div>
-            <div className="my-4 flex items-center">
-                <span className="flex items-center space-x-1">
-                    <span className="ml-3 inline-text text-xs font-semibold">
-                    <p className="mt-2 text-center text-sm text-white"> 
-                        Genres: {product.genres.join(', ')}
-                    </p>
-                    </span>
-                </span>
-            </div>
+  return (
+  <section className="w-full overflow-hidden">
+    <div className="mx-auto mt-[10vh] max-w-5xl px-5 py-24">
 
-            <p className="leading-relaxed text-justify"> {product.synopsis} </p>
-
-            <div className="mb-5 mt-6 flex items-center border-b-2 border-gray-100 pb-5">
-            </div>
-          </div>
+      <div className="flex flex-col items-center mb-10">
+        <h1 className="text-4xl font-semibold text-white pl-0">
+          {product.title}
+        </h1>
+        <div className="flex w-full title-font text-2xl font-semibold text-white justify-center">
+            Rating: {product.rating}
         </div>
       </div>
-    </section>
+
+      <div className="flex items-start lg:w-4/5 mx-auto">
+        <img className="h-64 w-[5vw] rounded object-contain lg:h-96 lg:w-1/3 lg:mr-10"
+          src={product.image}
+        />
+        <div className="mt-6 w-full lg:mt-0 lg:w-2/3 lg:pl-10">
+          <p className="leading-relaxed font-semibold text-justify mt-2 text-white"> 
+            Genres: {product.genres.join(', ')}
+          </p>
+          <br />
+          <p>
+             Synopsis: {isExpanded ? product.synopsis : `${product.synopsis.substring(0, 400)}...`}
+          </p>
+          <p className="text-blue-500 hover:text-blue-700" onClick={() => setIsExpanded(!isExpanded)}>
+          {isExpanded ? 'Read Less' : 'Read More'}
+        </p>
+        </div>
+      </div>
+    </div>
+    <div className="mt-10 mb-20">
+      <div className="flex justify-center">
+        <iframe 
+          width="560" 
+          height="315" 
+          src={`${product.trailer}?autoplay=1&mute=1`}
+          title="YouTube video player" 
+          frameborder="0" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture;" 
+          allowfullscreen
+        ></iframe>
+      </div>
+    </div>
+  </section>
+  
     )
 }
 

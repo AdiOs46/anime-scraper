@@ -3,7 +3,8 @@ from bs4 import BeautifulSoup
 import json
 from multiprocessing import Pool
 
-def get_top_anime_urls(page_number=1):
+def get_top_anime_urls():
+    page_number=1
     try:
         base_url="https://myanimelist.net/topanime.php"
         n=(page_number-1)*50
@@ -54,14 +55,21 @@ def scrape_anime(url):
             if rating_element:
                 rating = rating_element.text.strip()     
             else:
-                "Rating not found"
+                rating = "Rating not found"
+            
+            trailer_element = soup.find('a', class_='iframe js-fancybox-video video-unit promotion')
+            if trailer_element:
+                trailer = trailer_element.get('href')
+            else:
+                trailer = "Trailer not found"
             
             anime_data = {
                 'title': title,
                 'image': image,
                 'genres': genres,
                 'synopsis': synopsis,
-                'rating': rating
+                'rating': rating,
+                'trailer': trailer
             }
             
             return anime_data

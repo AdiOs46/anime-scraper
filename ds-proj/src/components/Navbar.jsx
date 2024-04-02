@@ -1,6 +1,5 @@
 'use client'
-
-import React from 'react'
+import React, {useState} from 'react'
 import { ChevronDown } from 'lucide-react'
 
 const menuItems = [
@@ -9,12 +8,17 @@ const menuItems = [
     href: '/',
   },
   {
-    name: 'Statistics',
+    name: 'Genres',
     href: '/Statistics',
   }
 ]
 
-function Navbar({onSearch}) {
+function Navbar({onSearch, onGenreSelect, genres}) {
+  const [isOpen, setIsOpen] = useState(false)
+
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen)
+  }
 
   const handleSearch = event => {
     onSearch(event.target.value)
@@ -29,20 +33,33 @@ function Navbar({onSearch}) {
         <div className="hidden lg:block">
           <ul className="ml-12 inline-flex space-x-8">
 
-            {menuItems.map((item) => (
-              <li key={item.name}>
-                <a
-                  href={item.href}
-                  className="inline-flex items-center text-sm font-semibold text-gray-800 hover:text-gray-900"
-                >
-                  {item.name}
-                  <span>
+          {menuItems.map((item) => (
+              item.name === 'Genres' ? (
+                <li key={item.name}>
+                  <a onClick={toggleDropdown} className="inline-flex items-center text-sm font-semibold text-gray-800 hover:text-gray-900">
+                    {item.name}
                     <ChevronDown className="ml-2 h-4 w-4" />
-                  </span>
-                </a>
-              </li>
+                  </a>
+                  {isOpen && (
+                    <ul className="absolute bg-white border border-gray-200 mt-2 rounded-md shadow-lg z-50  grid grid-cols-6 gap-">
+                      {genres.map((genre) => (
+                        <li key={genre}>
+                          <a onClick={() => onGenreSelect(genre)} className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">
+                            {genre}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              ) : (
+                <li key={item.name}>
+                  <a href={item.href} className="inline-flex items-center text-sm font-semibold text-gray-800 hover:text-gray-900">
+                    {item.name}
+                  </a>
+                </li>
+              )
             ))}
-
           </ul>
         </div>
         <div className="flex grow justify-end">
