@@ -3,21 +3,24 @@ from bs4 import BeautifulSoup
 import json
 from multiprocessing import Pool
 
-def get_top_anime_urls():
-    page_number=1
+def get_top_anime_urls(num_pages = 2):
     try:
-        base_url="https://myanimelist.net/topanime.php"
-        n=(page_number-1)*50
-        url=base_url+"?limit={}".format(n)
-
-        response = requests.get(url)
-        if response.status_code != 200:
-            print(f"Error: Unable to fetch data from {url}. Status code: {response.status_code}")
-            return None
+        base_url = "https://myanimelist.net/topanime.php"
+        top_anime_urls = []
         
-        soup = BeautifulSoup(response.content, 'html.parser')
-        anime_td_list = soup.find_all('div',class_="di-ib clearfix")
-        top_anime_urls = [tag.a['href'] for tag in anime_td_list]
+        for page_number in range(1, num_pages + 1):
+            n=(page_number-1)*50
+            url = f"{base_url}?limit={n}"
+
+            response = requests.get(url)
+            if response.status_code != 200:
+                print(f"Error: Unable to fetch data from {url}. Status code: {response.status_code}")
+                return None
+            
+            soup = BeautifulSoup(response.content, 'html.parser')
+            anime_td_list = soup.find_all('div',class_="di-ib clearfix")
+            top_anime_urls.extend([tag.a['href'] for tag in anime_td_list])
+            
         return top_anime_urls
         
     except Exception as e:

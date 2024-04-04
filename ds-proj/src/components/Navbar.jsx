@@ -1,6 +1,7 @@
 'use client'
 import React, {useState} from 'react'
 import { ChevronDown } from 'lucide-react'
+import { useLocation } from 'react-router-dom'
 
 const menuItems = [
   {
@@ -8,12 +9,13 @@ const menuItems = [
     href: '/',
   },
   {
-    name: 'Genres',
-    href: '/Statistics',
+    name: 'Genres'
   }
 ]
 
 function Navbar({onSearch, onGenreSelect, genres}) {
+
+  const location = useLocation()
   const [isOpen, setIsOpen] = useState(false)
 
   const toggleDropdown = () => {
@@ -28,15 +30,14 @@ function Navbar({onSearch, onGenreSelect, genres}) {
     <div className="absolute w-[100vw] bg-white top-0">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2 sm:px-6 lg:px-8">
         <div className="inline-flex items-center space-x-2">
-          <span className="font-bold text-black">AniTrack</span>
+          <span className="font-bold text-black">AniDB</span>
         </div>
         <div className="hidden lg:block">
           <ul className="ml-12 inline-flex space-x-8">
-
           {menuItems.map((item) => (
-              item.name === 'Genres' ? (
+              (location.pathname !== '/Information' && item.name === 'Genres') ? (
                 <li key={item.name}>
-                  <a onClick={toggleDropdown} className="inline-flex items-center text-sm font-semibold text-gray-800 hover:text-gray-900">
+                  <a onClick={toggleDropdown} className="inline-flex items-center text-sm font-semibold text-black hover:text-gray-900">
                     {item.name}
                     <ChevronDown className="ml-2 h-4 w-4" />
                   </a>
@@ -54,7 +55,7 @@ function Navbar({onSearch, onGenreSelect, genres}) {
                 </li>
               ) : (
                 <li key={item.name}>
-                  <a href={item.href} className="inline-flex items-center text-sm font-semibold text-gray-800 hover:text-gray-900">
+                  <a href={item.href} className="inline-flex items-center text-sm font-semibold text-black hover:text-gray-900">
                     {item.name}
                   </a>
                 </li>

@@ -1,6 +1,7 @@
 import { useLocation } from 'react-router-dom'
 import React from 'react'
 import { useState } from 'react'
+import Navbar from '../components/Navbar'
 
 function Information() {
   const location = useLocation()
@@ -8,6 +9,7 @@ function Information() {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
+  <>
   <section className="w-full overflow-hidden">
     <div className="mx-auto mt-[10vh] max-w-5xl px-5 py-24">
 
@@ -26,7 +28,7 @@ function Information() {
         />
         <div className="mt-6 w-full lg:mt-0 lg:w-2/3 lg:pl-10">
           <p className="leading-relaxed font-semibold text-justify mt-2 text-white"> 
-            Genres: {product.genres.join(', ')}
+            Genres: {product.genres ? product.genres.join(', ') : 'N/A'}
           </p>
           <br />
           <p>
@@ -40,19 +42,18 @@ function Information() {
     </div>
     <div className="mt-10 mb-20">
       <div className="flex justify-center">
-        <iframe 
+        <iframe className='border-0'
           width="560" 
           height="315" 
           src={`${product.trailer}?autoplay=1&mute=1`}
-          title="YouTube video player" 
-          frameborder="0" 
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture;" 
-          allowfullscreen
+          title="Trailer" 
+          allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture;" 
+          allowFullScreen
         ></iframe>
       </div>
     </div>
   </section>
-  
+  </>
     )
 }
 
