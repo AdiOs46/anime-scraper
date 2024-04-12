@@ -1,6 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
 import json
+from dask.distributed import Client, progress
+import dask.bag as db
 from multiprocessing import Pool
 
 def get_top_anime_urls(num_pages = 2):
@@ -29,7 +31,9 @@ def get_top_anime_urls(num_pages = 2):
 
 def scrape_anime(url):
     try:
-        response = requests.get(url)
+        headers = {'User-Agent': 'Mozilla/5.0'}
+        response = requests.get(url, headers=headers)
+        # response = requests.get(url)
         if response.status_code == 200:
             soup = BeautifulSoup(response.content, 'html.parser')
 
@@ -86,8 +90,10 @@ def scrape_anime(url):
 def scrape_top_anime():
     top_anime_urls = get_top_anime_urls()
     if top_anime_urls:
-        with Pool(processes=4) as pool:  # Adjust the number of processes as needed
-            results = pool.map(scrape_anime, top_anime_urls)
+        with Client() as client: #connect to dask cluster
+            # Distribute scraping tasks across the Dask cluster
+            b = db.from_sequence(top_anime_urls) #dask bag
+            results = b.map(scrape_anime).compute()
         return results
     else:
         return None
